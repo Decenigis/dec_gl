@@ -1,0 +1,14 @@
+[package]
+name = "dec_gl"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+gl = "0.14.0"
+glm = "0.2.3"
+glfw = {version = "0.59.0"}
+image = "0.25.5"
+toml = "0.8.19"
+thiserror = "2.0.11"
+serde = { version = "1.0.210", features = ["derive"] }
+rusttype = "0.9.3"
