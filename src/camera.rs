@@ -37,14 +37,14 @@ impl Camera {
 
         Camera {
             fov: fov.to_radians(),
-            screen_aspect_ratio: screen_aspect_ratio,
-            close_plane: close_plane,
-            far_plane: far_plane,
+            screen_aspect_ratio,
+            close_plane,
+            far_plane,
             
-            position: position,
-            pitch: pitch,
-            yaw: yaw,
-            roll: roll,
+            position,
+            pitch,
+            yaw,
+            roll,
         
             projection_matrix: BLANK_MATRIX,
             view_matrix: BLANK_MATRIX,
