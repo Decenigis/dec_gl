@@ -29,6 +29,12 @@ impl SetUniform for glm::Vec4 {
     }
 }
 
+impl SetUniform for glm::IVec2 {
+    unsafe fn set_uniform(self, location: GLint) {
+        gl::Uniform2i(location, self.x, self.y) ;
+    }
+}
+
 impl SetUniform for f32 {
     unsafe fn set_uniform(self, location: GLint) {
         gl::Uniform1f(location, self);
