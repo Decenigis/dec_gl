@@ -10,5 +10,3 @@ glfw = {version = "0.59.0"}
 image = "0.25.5"
 toml = "0.8.19"
 thiserror = "2.0.11"
-serde = { version = "1.0.210", features = ["derive"] }
-rusttype = "0.9.3"
