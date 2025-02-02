@@ -2,6 +2,7 @@ extern crate gl;
 
 use gl::types::GLuint;
 use glm::{IVec3, ivec3};
+use mockall::automock;
 use crate::RenderError;
 
 
@@ -20,6 +21,7 @@ impl Drop for Texture3D {
 }
 
 
+#[automock]
 impl Texture3D {
     pub fn new_from_raw_data(data: &Vec<u8>, size: IVec3, antialiased: bool) -> Result<Texture3D, RenderError> {
         let mut texture = Self::new_uninitialised();

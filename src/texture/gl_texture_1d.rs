@@ -1,5 +1,6 @@
 extern crate gl;
 use gl::types::GLuint;
+use mockall::automock;
 use crate::RenderError;
 
 pub struct Texture1D {
@@ -15,7 +16,7 @@ impl Drop for Texture1D {
     }
 }
 
-
+#[automock]
 impl Texture1D {
     pub fn new() -> Texture1D{
         let texture = Texture1D { id: 0, size: 0 };

@@ -4,6 +4,7 @@ use std::path::Path;
 use gl::types::GLuint;
 use glm::{IVec2, ivec2};
 use image::RgbaImage;
+use mockall::automock;
 use crate::RenderError;
 
 
@@ -22,6 +23,7 @@ impl Drop for Texture2D {
 }
 
 
+#[automock]
 impl Texture2D {
     pub fn new(path: &Path, antialiased: bool) -> Result<Texture2D, RenderError>{
         let mut texture = Self::new_uninitialised();

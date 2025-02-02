@@ -2,6 +2,7 @@ extern crate gl;
 
 use gl::types::GLuint;
 use glm::{IVec2, ivec2};
+use mockall::automock;
 use crate::RenderError;
 
 pub struct Texture2Du8 {
@@ -18,6 +19,7 @@ impl Drop for Texture2Du8 {
 }
 
 
+#[automock]
 impl Texture2Du8 {
     pub fn new() -> Texture2Du8 {
         let texture = Texture2Du8 { id: 0, size: ivec2(0, 0) };
