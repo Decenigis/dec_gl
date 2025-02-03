@@ -1,7 +1,7 @@
 extern crate gl;
 use gl::types::{GLuint, GLint};
 use std::collections::HashMap;
-
+use mockall::automock;
 use crate::shader::SetUniform;
 use crate::{RenderError};
 use super::Shader;
@@ -20,6 +20,7 @@ impl Drop for ShaderProgram {
     }
 }
 
+#[automock]
 impl ShaderProgram {
     pub fn load_shader_program(filepath: &str, identifying_string: &str, geometry_included: bool) -> Result<ShaderProgram, RenderError> { //returns the finalised shader struct
         let mut shader_program = ShaderProgram { id: 0, _name: identifying_string.to_string(), uniforms: HashMap::new() }; // create a struct ready for the final ID
@@ -123,7 +124,7 @@ impl ShaderProgram {
         unsafe { gl::UseProgram(self.id); }
     }
 
-    pub fn set_uniform<T: SetUniform>(&mut self, name: String, value: T){
+    pub fn set_uniform<T: 'static + SetUniform>(&mut self, name: String, value: T){
         let location: GLint;
 
         self.bind();

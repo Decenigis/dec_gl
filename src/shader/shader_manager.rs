@@ -15,8 +15,8 @@ impl ShaderManager {
 
     pub fn register_shader(&mut self, name: String, shader_result: Result<ShaderProgram, RenderError>) -> Result<&ShaderProgram, RenderError> {
         match shader_result {
-            Ok(texture) => {
-                match self.shader_map.insert(name.clone(), texture) {
+            Ok(shader) => {
+                match self.shader_map.insert(name.clone(), shader) {
                     Some(_) => Err(RenderError::ShaderError { shader_name: name, shader_type: "SHADER_PROGRAM".to_string(), error: "Shader already exists in shader manager!".to_string() }),
                     None => Ok(self.shader_map.get(&name).unwrap())
                 }
