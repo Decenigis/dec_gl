@@ -18,6 +18,12 @@ impl Drop for Texture2DInt {
     }
 }
 
+impl Default for Texture2DInt {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 
 #[automock]
 impl Texture2DInt {

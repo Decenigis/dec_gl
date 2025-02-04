@@ -5,7 +5,6 @@ use glm::{IVec3, ivec3};
 use mockall::automock;
 use crate::RenderError;
 
-
 pub struct Texture3D {
     id: GLuint,
     size: IVec3

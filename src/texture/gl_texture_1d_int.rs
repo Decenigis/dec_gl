@@ -4,8 +4,6 @@ use gl::types::GLuint;
 use mockall::automock;
 use crate::RenderError;
 
-
-
 pub struct Texture1DInt {
     id: GLuint,
     size: i32
@@ -16,6 +14,12 @@ impl Drop for Texture1DInt {
         unsafe {
             gl::DeleteTextures(1, [self.id].as_ptr());
         }
+    }
+}
+
+impl Default for Texture1DInt {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

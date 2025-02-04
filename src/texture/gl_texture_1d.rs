@@ -16,6 +16,13 @@ impl Drop for Texture1D {
     }
 }
 
+impl Default for Texture1D {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+
 #[automock]
 impl Texture1D {
     pub fn new() -> Texture1D{

@@ -7,7 +7,6 @@ use image::RgbaImage;
 use mockall::automock;
 use crate::RenderError;
 
-
 pub struct Texture2D {
     id: GLuint,
     size: IVec2

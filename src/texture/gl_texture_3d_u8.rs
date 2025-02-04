@@ -18,6 +18,12 @@ impl Drop for Texture3Du8 {
     }
 }
 
+impl Default for Texture3Du8 {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 
 #[automock]
 impl Texture3Du8 {
