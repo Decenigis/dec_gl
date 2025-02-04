@@ -1,5 +1,6 @@
+#![allow(dead_code)]
 use gl::types::GLuint;
-use super::{Vertex, RenderError};
+use crate::{Vertex, RenderError};
 
 
 pub enum Renderable {
@@ -19,7 +20,7 @@ impl Renderable {
         Renderable::Uninitialised {  }
     }
 
-    pub fn new_initialised<T: Vertex>(vertices: &Vec<T>, indices: Option<&Vec<u32>>) -> Result<Renderable, RenderError> {
+    pub fn new_initialised<T: 'static + Vertex>(vertices: &Vec<T>, indices: Option<&Vec<u32>>) -> Result<Renderable, RenderError> {
         let mut new_renderable = Renderable::new_uninitialised();
         match new_renderable.initialise(vertices, indices) {
             Err(e) => return Err(e),
@@ -28,12 +29,12 @@ impl Renderable {
         Ok(new_renderable)
     }
 
-    pub fn initialise<T: Vertex>(&mut self, vertices: &Vec<T>, indices: Option<&Vec<u32>>) -> Result<(), RenderError> {
+    pub fn initialise<T: 'static + Vertex>(&mut self, vertices: &Vec<T>, indices: Option<&Vec<u32>>) -> Result<(), RenderError> {
         self.uninitialise();
 
-        let mut vao = 0; 
-        let mut vbo = 0; 
-        
+        let mut vao = 0;
+        let mut vbo = 0;
+
         unsafe {
             gl::GenVertexArrays(1, &mut vao);
             if vao == 0 {
@@ -92,7 +93,7 @@ impl Renderable {
         return Ok(()) //If I'm a real thinker then there should be no way for an uncaught invalid state to exist.
     }
 
-    pub fn update_data<T>(&mut self, vertices: &Vec<T>, indices: Option<&Vec<u32>>) -> Result<(), RenderError> {
+    pub fn update_data<T: 'static>(&mut self, vertices: &Vec<T>, indices: Option<&Vec<u32>>) -> Result<(), RenderError> {
         match self {
             Self::Initialised { vbo, vertex_count, .. } => {
                 *vertex_count = vertices.len() as i32;
@@ -149,10 +150,10 @@ impl Renderable {
             }
             Self::InitialisedWithIndexing { vao, index_count, .. } => unsafe {
                 gl::BindVertexArray(*vao);
-                gl::DrawElements(gl::TRIANGLES, 
-                    *index_count, 
-                    gl::UNSIGNED_INT,
-                    0 as *const _ );
+                gl::DrawElements(gl::TRIANGLES,
+                                 *index_count,
+                                 gl::UNSIGNED_INT,
+                                 0 as *const _ );
                 gl::BindVertexArray(0);
             }
 
