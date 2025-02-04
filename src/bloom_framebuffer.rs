@@ -1,7 +1,7 @@
 use gl::types::{GLenum, GLfloat, GLint, GLuint};
 use glm::{IVec2, ivec2, UVec2, vec2};
 use crate::{FrameBuffer, Renderable, RenderError, Vertex3d};
-use super::shader::{ShaderProgram, ShaderManager};
+use super::shader::{GLShaderProgram, ShaderManager};
 
 pub struct BloomFramebuffer {
     fbo_id: GLuint,
@@ -252,7 +252,7 @@ impl BloomFramebuffer {
         Ok(())
     }
 
-     fn bind_buffer_textures(&self, shader_program: &mut ShaderProgram) { // The textures will ALWAYS be bound to unit 0 and 1
+     fn bind_buffer_textures(&self, shader_program: &mut GLShaderProgram) { // The textures will ALWAYS be bound to unit 0 and 1
         unsafe {
             gl::ActiveTexture(gl::TEXTURE0);
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, self.texture_id);

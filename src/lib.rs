@@ -14,8 +14,6 @@ pub mod glm_hashes;
 pub mod texture;
 pub mod shader;
 
-use mockall_double::double;
-
 pub use gl_window::GLWindow;
 pub use gl_handler::GLHandler;
 pub use render_error::RenderError;
@@ -27,6 +25,4 @@ pub use initialise_attrib_pointers::Vertex;
 pub use vertex_3d::Vertex3d;
 pub use vertex_2d::Vertex2d;
 pub use bloom_framebuffer::BloomFramebuffer;
-
-#[double]
 pub use renderable::Renderable;
