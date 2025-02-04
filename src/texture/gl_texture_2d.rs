@@ -2,10 +2,10 @@ extern crate gl;
 use std::path::Path;
 
 use gl::types::GLuint;
-use glm::{IVec2, ivec2};
 use image::RgbaImage;
 use mockall::automock;
 use crate::RenderError;
+use crate::types::{IVec2, ivec2};
 
 pub struct Texture2D {
     id: GLuint,

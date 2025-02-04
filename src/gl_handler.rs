@@ -1,5 +1,4 @@
 extern crate gl;
-extern crate glm;
 
 use std::cell::RefCell;
 use std::rc::Rc;

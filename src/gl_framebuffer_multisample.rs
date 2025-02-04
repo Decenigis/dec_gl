@@ -1,10 +1,8 @@
 use gl::types::{GLuint, GLint, GLfloat};
-use glm::{IVec2, ivec2, UVec2};
+use crate::shader::ShaderProgram;
+use crate::types::{IVec2, ivec2, UVec2};
 
-use crate::{string};
-use crate::app::logger;
-
-use super::{RenderError, Vertex, InitialiseAttribPtrs, ShaderProgram, Renderable};
+use super::{RenderError};
 
 pub struct FrameBufferMultisample {
    fbo_id: GLuint,
@@ -31,19 +29,17 @@ impl FrameBufferMultisample {
         let mut depth_buffer_id: GLuint = 0;
 
         unsafe {
-            logger::add_to_log(format!("Creating a multisampled framebuffer with {} samples, of size {}x{}", samples, width, height).as_str());
-
             gl::GenFramebuffers(1, &mut fbo_id);
             if fbo_id == 0 {
-                return Err(RenderError::BufferError { error: string!("Failed to create framebuffer!") })
+                return Err(RenderError::BufferError { error: "Failed to create framebuffer!".to_string() })
             };
             gl::GenTextures(1, &mut texture_id);
             if texture_id == 0 {
-                return Err(RenderError::BufferError { error: string!("Failed to create texture for framebuffer!") })
+                return Err(RenderError::BufferError { error: "Failed to create texture for framebuffer!".to_string() })
             };
             gl::GenTextures(1, &mut depth_buffer_id);
             if depth_buffer_id == 0 {
-                return Err(RenderError::BufferError { error: string!("Failed to create depth and stencil buffer for framebuffer!") })
+                return Err(RenderError::BufferError { error: "Failed to create depth and stencil buffer for framebuffer!".to_string() })
             };
 
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, texture_id); //create the image texture for the FBO
@@ -62,21 +58,19 @@ impl FrameBufferMultisample {
 
             if gl::CheckFramebufferStatus(gl::FRAMEBUFFER) != gl::FRAMEBUFFER_COMPLETE { //if anything didn't work, return an error
                 match gl::CheckFramebufferStatus(gl::FRAMEBUFFER) {
-                    gl::FRAMEBUFFER_UNDEFINED => return Err(RenderError::BufferError { error: string!("Framebuffer undefined!") }),
+                    gl::FRAMEBUFFER_UNDEFINED => return Err(RenderError::BufferError { error: "Framebuffer undefined!".to_string() }),
                     gl::FRAMEBUFFER_INCOMPLETE_ATTACHMENT => {
-                        if cfg!(windows){
-                            return Err(RenderError::BufferError { error: string!("Incomplete framebuffer attachment points! This is fatal on Windows.") })
+                        if cfg!(windows) {
+                            return Err(RenderError::BufferError { error: "Incomplete framebuffer attachment points! This is fatal on Windows.".to_string() })
                         }
-                        logger::add_error_to_log("Incomplete framebuffer attachment points! This is not NECESSARILY fatal on the current system.")
                     },
-                    gl::FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT => return Err(RenderError::BufferError { error: string!("No images are attached to the framebuffer!") }),
-                    gl::FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER => return Err(RenderError::BufferError { error: string!("Incomplete draw buffer!") }),
-                    gl::FRAMEBUFFER_INCOMPLETE_READ_BUFFER => return Err(RenderError::BufferError { error: string!("Incomplete read buffer!") }),
-                    gl::FRAMEBUFFER_INCOMPLETE_MULTISAMPLE => return Err(RenderError::BufferError { error: string!("Unsupported internal formats for attached framebuffer images!") }),
-                    gl::FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS => return Err(RenderError::BufferError { error: string!("Multisample textures are invalid!") }),
-                    _ => return Err(RenderError::BufferError { error: string!("Unknown error with framebuffer creation!") }),
+                    gl::FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT => return Err(RenderError::BufferError { error: "No images are attached to the framebuffer!".to_string() }),
+                    gl::FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER => return Err(RenderError::BufferError { error: "Incomplete draw buffer!".to_string() }),
+                    gl::FRAMEBUFFER_INCOMPLETE_READ_BUFFER => return Err(RenderError::BufferError { error: "Incomplete read buffer!".to_string() }),
+                    gl::FRAMEBUFFER_INCOMPLETE_MULTISAMPLE => return Err(RenderError::BufferError { error: "Unsupported internal formats for attached framebuffer images!".to_string() }),
+                    gl::FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS => return Err(RenderError::BufferError { error: "Multisample textures are invalid!".to_string() }),
+                    _ => return Err(RenderError::BufferError { error: "Unknown error with framebuffer creation!".to_string() }),
                 }
-
             }
 
             gl::BindFramebuffer(gl::DRAW_FRAMEBUFFER, 0);
@@ -91,7 +85,6 @@ impl FrameBufferMultisample {
     }
 
     pub fn resize(&mut self, width: GLuint, height: GLuint) {
-        logger::add_to_log(format!("Trying to resize a framebuffer to size {}x{}", width, height).as_str());
         unsafe {
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, self.texture_id); //re-create the bound texture to match the new dimensions
             gl::TexImage2DMultisample(gl::TEXTURE_2D_MULTISAMPLE, self.samples, gl::RGBA, width as i32, height as i32, 0);
@@ -104,8 +97,6 @@ impl FrameBufferMultisample {
             gl::TexParameteri(gl::TEXTURE_2D_MULTISAMPLE, gl::TEXTURE_MAG_FILTER, gl::NEAREST as i32);
 
             self.size = ivec2(width as i32, height as i32);
-
-            logger::add_to_log("Successfully resized framebuffer");
         }
     }
 
@@ -135,8 +126,8 @@ impl FrameBufferMultisample {
             gl::ActiveTexture(gl::TEXTURE1);
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, self.depth_buffer_id);
 
-            shader_program.set_uniform(string!("framebuffer_texture"), 0);
-            shader_program.set_uniform(string!("depth_buffer_texture"), 1);
+            shader_program.set_uniform("framebuffer_texture".to_string(), 0);
+            shader_program.set_uniform("depth_buffer_texture".to_string(), 1);
         }
     }
 

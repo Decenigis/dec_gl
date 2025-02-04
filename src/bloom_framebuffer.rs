@@ -1,6 +1,6 @@
 use gl::types::{GLenum, GLfloat, GLint, GLuint};
-use glm::{IVec2, ivec2, UVec2, vec2};
 use crate::{FrameBuffer, Renderable, RenderError, Vertex3d};
+use crate::types::{ivec2, IVec2, vec2, UVec2};
 use super::shader::{ShaderProgram, ShaderManager};
 
 pub struct BloomFramebuffer {

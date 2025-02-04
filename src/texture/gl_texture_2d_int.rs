@@ -1,9 +1,9 @@
 extern crate gl;
 
 use gl::types::GLuint;
-use glm::{IVec2, ivec2};
 use mockall::automock;
 use crate::RenderError;
+use crate::types::{IVec2, ivec2};
 
 pub struct Texture2DInt {
     id: GLuint,

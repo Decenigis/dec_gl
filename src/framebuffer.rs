@@ -1,5 +1,5 @@
 use gl::types::{GLuint, GLint, GLfloat};
-use glm::{IVec2, ivec2, UVec2};
+use crate::types::{IVec2, ivec2, UVec2};
 
 use super::{Renderable, RenderError, Vertex2d};
 use super::shader::ShaderProgram;

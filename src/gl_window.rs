@@ -3,7 +3,7 @@
 use std::collections::HashSet;
 
 use glfw::{Context, Glfw, Key, Action, GlfwReceiver};
-use glm::{Vec2, UVec2, uvec2, ivec2, IVec2, vec2};
+use crate::types::{Vec2, UVec2, uvec2, ivec2, IVec2, vec2};
 
 use crate::RenderError;
 type Result<T> = std::result::Result<T, RenderError>;
@@ -205,7 +205,7 @@ impl GLWindow {
         self.has_resized_this_frame
     }
 
-    pub fn get_window_size(&self) -> glm::UVec2 {
+    pub fn get_window_size(&self) -> UVec2 {
         if self.fullscreen {
             self.fullscreen_size
         }
