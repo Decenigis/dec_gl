@@ -2,7 +2,7 @@ use gl::types::{GLuint, GLint, GLfloat};
 use glm::{IVec2, ivec2, UVec2};
 
 use super::{Renderable, RenderError, Vertex2d};
-use super::shader::GLShaderProgram;
+use super::shader::ShaderProgram;
 
 pub struct FrameBuffer {
     fbo_id: GLuint,
@@ -124,7 +124,7 @@ impl FrameBuffer {
         unsafe { gl::BindFramebuffer(gl::DRAW_FRAMEBUFFER, 0); }
     }
 
-    pub fn draw_this_framebuffer(&self, shader_program: &mut GLShaderProgram) { // The textures will ALWAYS be bound to unit 0 and 1
+    pub fn draw_this_framebuffer(&self, shader_program: &mut ShaderProgram) { // The textures will ALWAYS be bound to unit 0 and 1
         self.bind_buffer_textures(shader_program);
         self.renderable.draw();
     }
@@ -136,7 +136,7 @@ impl FrameBuffer {
         }
     }
 
-    pub fn bind_buffer_textures(&self, shader_program: &mut GLShaderProgram) { // The textures will ALWAYS be bound to unit 0 and 1
+    pub fn bind_buffer_textures(&self, shader_program: &mut ShaderProgram) { // The textures will ALWAYS be bound to unit 0 and 1
         unsafe {
             gl::ActiveTexture(gl::TEXTURE0);
             gl::BindTexture(gl::TEXTURE_2D, self.texture_id);

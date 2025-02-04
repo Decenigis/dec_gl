@@ -1,10 +1,10 @@
 use std::collections::HashMap;
 
-use super::{GLShaderProgram, ShaderProgram};
+use super::ShaderProgram;
 use crate::RenderError;
 
 pub struct ShaderManager {
-    shader_map: HashMap<String, dyn ShaderProgram>
+    shader_map: HashMap<String, ShaderProgram>
 }
 
 
@@ -13,7 +13,7 @@ impl ShaderManager {
         ShaderManager { shader_map: HashMap::new() }
     }
 
-    pub fn register_shader(&mut self, name: String, shader_result: Result<dyn ShaderProgram, RenderError>) -> Result<&dyn ShaderProgram, RenderError> {
+    pub fn register_shader(&mut self, name: String, shader_result: Result<ShaderProgram, RenderError>) -> Result<&ShaderProgram, RenderError> {
         match shader_result {
             Ok(shader) => {
                 match self.shader_map.insert(name.clone(), shader) {
@@ -25,7 +25,7 @@ impl ShaderManager {
         }
     }
 
-    pub fn bind(&mut self, shader_name: String) -> Result<&mut dyn ShaderProgram, RenderError>{
+    pub fn bind(&mut self, shader_name: String) -> Result<&mut ShaderProgram, RenderError>{
         match self.get_shader(shader_name) {
             Ok(shader) => {
                 shader.bind();
@@ -35,7 +35,7 @@ impl ShaderManager {
         }      
     }
 
-    pub fn get_shader(&mut self, shader_name: String) -> Result<&mut dyn ShaderProgram, RenderError> {
+    pub fn get_shader(&mut self, shader_name: String) -> Result<&mut ShaderProgram, RenderError> {
         match self.shader_map.get_mut(&shader_name.clone()) {
             Some(shader) => Ok(shader),
             None => Err(RenderError::ShaderError { shader_name, shader_type: "SHADER_PROGRAM".to_string(), error: "Shader doesn't exist!".to_string() })
