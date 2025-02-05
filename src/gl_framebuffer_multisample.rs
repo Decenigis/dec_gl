@@ -118,7 +118,7 @@ impl FrameBufferMultisample {
         }
     }
 
-    pub fn bind_buffer_textures(&self, shader_program: &mut ShaderProgram) { // The textures will ALWAYS be bound to unit 0 and 1
+    pub fn bind_buffer_textures(&self, shader_program: &mut Box<dyn ShaderProgram>) { // The textures will ALWAYS be bound to unit 0 and 1
         unsafe {
             gl::ActiveTexture(gl::TEXTURE0);
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, self.texture_id);
@@ -126,8 +126,8 @@ impl FrameBufferMultisample {
             gl::ActiveTexture(gl::TEXTURE1);
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, self.depth_buffer_id);
 
-            shader_program.set_uniform("framebuffer_texture".to_string(), 0);
-            shader_program.set_uniform("depth_buffer_texture".to_string(), 1);
+            shader_program.set_uniform("framebuffer_texture".to_string(), &0);
+            shader_program.set_uniform("depth_buffer_texture".to_string(), &1);
         }
     }
 

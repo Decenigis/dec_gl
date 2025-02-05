@@ -1,3 +1,4 @@
+use std::fmt::{Display, Formatter};
 use std::hash::{Hash, Hasher};
 use impl_ops::*;
 use std::ops;
@@ -22,6 +23,12 @@ impl Normalise for Vec3 {
     fn normalise(&self) -> Self {
         let length = (self.x * self.x + self.y * self.y + self.z * self.z).sqrt();
         Vec3::new(self.x / length, self.y / length, self.z / length)
+    }
+}
+
+impl Display for Vec3 {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        write!(f, "({}, {}, {})", self.x, self.y, self.z)
     }
 }
 

@@ -1,3 +1,4 @@
+use std::fmt::{Display, Formatter};
 use std::hash::{Hash, Hasher};
 use impl_ops::*;
 use std::ops;
@@ -14,6 +15,12 @@ impl Hash for IVec3 {
         self.x.hash(state);
         self.y.hash(state);
         self.z.hash(state);
+    }
+}
+
+impl Display for IVec3 {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        write!(f, "({}, {}, {})", self.x, self.y, self.z)
     }
 }
 

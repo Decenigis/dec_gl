@@ -1,3 +1,4 @@
+use std::fmt::{Display, Formatter};
 use std::hash::{Hash, Hasher};
 use impl_ops::*;
 use std::ops;
@@ -12,6 +13,12 @@ impl Hash for UVec2 {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.x.hash(state);
         self.y.hash(state);
+    }
+}
+
+impl Display for UVec2 {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        write!(f, "({}, {})", self.x, self.y)
     }
 }
 

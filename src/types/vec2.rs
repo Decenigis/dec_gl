@@ -1,3 +1,4 @@
+use std::fmt::{Display, Formatter};
 use std::hash::{Hash, Hasher};
 use impl_ops::*;
 use std::ops;
@@ -20,6 +21,12 @@ impl Normalise for Vec2 {
     fn normalise(&self) -> Self {
         let length = (self.x * self.x + self.y * self.y).sqrt();
         Vec2::new(self.x / length, self.y / length)
+    }
+}
+
+impl Display for Vec2 {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        write!(f, "({}, {})", self.x, self.y)
     }
 }
 

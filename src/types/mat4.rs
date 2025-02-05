@@ -1,3 +1,4 @@
+use std::fmt::{Display, Formatter};
 use crate::types::vec4::{vec4, Vec4};
 use std::hash::{Hash, Hasher};
 use impl_ops::*;
@@ -17,6 +18,12 @@ impl Hash for Mat4 {
         self.c1.hash(state);
         self.c2.hash(state);
         self.c3.hash(state);
+    }
+}
+
+impl Display for Mat4 {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        write!(f, "[{}, {}, {}, {}]", self.c0, self.c1, self.c2, self.c3)
     }
 }
 

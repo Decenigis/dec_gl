@@ -212,14 +212,14 @@ impl BloomFramebuffer {
     fn gaussian_blur_to_outbuffer(&self, target_size: UVec2, shader_manager: &mut ShaderManager) -> Result<(), RenderError> {
 
         let bloom_shader = shader_manager.bind("BLOOM".to_string())?;
-        bloom_shader.set_uniform("screen_size".to_string(), vec2(target_size.x as f32, target_size.y as f32));
-        bloom_shader.set_uniform("samples".to_string(), self.samples);
+        bloom_shader.set_uniform("screen_size".to_string(), &vec2(target_size.x as f32, target_size.y as f32));
+        bloom_shader.set_uniform("samples".to_string(), &self.samples);
         self.bind_buffer_textures(bloom_shader);
 
         unsafe { gl::Disable(gl::DEPTH_TEST); }
 
         for i in 0..self.bloom_levels*2 {
-            bloom_shader.set_uniform("direction".to_string(), i % 2);
+            bloom_shader.set_uniform("direction".to_string(), &(i % 2));
 
             self.ping_pong_buffers[((i + 1) % 2) as usize].bind_draw_target();
             self.ping_pong_buffers[(i % 2) as usize].bind_buffer_textures(bloom_shader);
@@ -252,7 +252,7 @@ impl BloomFramebuffer {
         Ok(())
     }
 
-     fn bind_buffer_textures(&self, shader_program: &mut ShaderProgram) { // The textures will ALWAYS be bound to unit 0 and 1
+     fn bind_buffer_textures(&self, shader_program: &mut Box<dyn ShaderProgram>) { // The textures will ALWAYS be bound to unit 0 and 1
         unsafe {
             gl::ActiveTexture(gl::TEXTURE0);
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, self.texture_id);
@@ -260,8 +260,8 @@ impl BloomFramebuffer {
             gl::ActiveTexture(gl::TEXTURE1);
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, self.bloom_texture_id);
 
-            shader_program.set_uniform("colour_texture".to_string(), 0);
-            shader_program.set_uniform("bloom_texture".to_string(), 1);
+            shader_program.set_uniform("colour_texture".to_string(), &0);
+            shader_program.set_uniform("bloom_texture".to_string(), &1);
         }
     }
 }
