@@ -22,7 +22,7 @@ impl Drop for GLShaderProgram {
 
 
 impl GLShaderProgram {
-    pub fn load_shader_program(filepath: &str, identifying_string: &str, geometry_included: bool) -> Result<GLShaderProgram, RenderError> { //returns the finalised shader struct
+    pub fn load_shader_program(filepath: &str, identifying_string: &str, geometry_included: bool) -> Result<Box<GLShaderProgram>, RenderError> { //returns the finalised shader struct
         let mut shader_program = GLShaderProgram { id: 0, _name: identifying_string.to_string(), uniforms: HashMap::new() }; // create a struct ready for the final ID
 
         // -- VERTEX SHADER -- //
@@ -116,7 +116,7 @@ impl GLShaderProgram {
 
         shader_program.bind();
 
-        Ok(shader_program)
+        Ok(Box::new(shader_program))
     }
 }
 
