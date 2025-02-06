@@ -13,16 +13,12 @@ impl ShaderManager {
         ShaderManager { shader_map: HashMap::new() }
     }
 
-    pub fn register_shader(&mut self, name: String, shader_result: Result<Box<dyn ShaderProgram>, RenderError>) -> Result<&mut Box<dyn ShaderProgram>, RenderError> {
-        match shader_result {
-            Ok(shader) => {
-                match self.shader_map.insert(name.clone(), shader) {
-                    Some(_) => Err(RenderError::ShaderError { shader_name: name, shader_type: "SHADER_PROGRAM".to_string(), error: "Shader already exists in shader manager!".to_string() }),
-                    None => Ok(self.shader_map.get_mut(&name).unwrap())
-                }
-            }
-            Err(e) => Err(e),
+    pub fn register_shader(&mut self, name: String, shader: Box<dyn ShaderProgram>) -> Result<&mut Box<dyn ShaderProgram>, RenderError> {
+        match self.shader_map.insert(name.clone(), shader) {
+            Some(_) => Err(RenderError::ShaderError { shader_name: name, shader_type: "SHADER_PROGRAM".to_string(), error: "Shader already exists in shader manager!".to_string() }),
+            None => Ok(self.shader_map.get_mut(&name).unwrap())
         }
+    
     }
 
     pub fn bind(&mut self, shader_name: String) -> Result<&mut Box<dyn ShaderProgram>, RenderError>{
