@@ -2,6 +2,7 @@ use std::fmt::{Display, Formatter};
 use std::hash::{Hash, Hasher};
 use impl_ops::*;
 use std::ops;
+use std::ops::{Index, IndexMut};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct IVec3 {
@@ -21,6 +22,29 @@ impl Hash for IVec3 {
 impl Display for IVec3 {
     fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
         write!(f, "({}, {}, {})", self.x, self.y, self.z)
+    }
+}
+
+impl Index<usize> for IVec3 {
+    type Output = i32;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        match index {
+            0 => &self.x,
+            1 => &self.y,
+            2 => &self.z,
+            _ => panic!("Index out of bounds")
+        }
+    }
+}
+impl IndexMut<usize> for IVec3 {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        match index {
+            0 => &mut self.x,
+            1 => &mut self.y,
+            2 => &mut self.z,
+            _ => panic!("Index out of bounds")
+        }
     }
 }
 

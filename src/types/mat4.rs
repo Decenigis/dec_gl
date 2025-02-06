@@ -3,6 +3,7 @@ use crate::types::vec4::{vec4, Vec4};
 use std::hash::{Hash, Hasher};
 use impl_ops::*;
 use std::ops;
+use std::ops::{Index, IndexMut};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Mat4 {
@@ -24,6 +25,32 @@ impl Hash for Mat4 {
 impl Display for Mat4 {
     fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
         write!(f, "[{}, {}, {}, {}]", self.c0, self.c1, self.c2, self.c3)
+    }
+}
+
+impl Index<usize> for Mat4 {
+    type Output = Vec4;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        match index {
+            0 => &self.c0,
+            1 => &self.c1,
+            2 => &self.c2,
+            3 => &self.c3,
+            _ => panic!("Index out of bounds")
+        }
+    }
+}
+
+impl IndexMut<usize> for Mat4 {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        match index {
+            0 => &mut self.c0,
+            1 => &mut self.c1,
+            2 => &mut self.c2,
+            3 => &mut self.c3,
+            _ => panic!("Index out of bounds")
+        }
     }
 }
 

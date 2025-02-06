@@ -2,6 +2,7 @@ use std::fmt::{Display, Formatter};
 use std::hash::{Hash, Hasher};
 use impl_ops::*;
 use std::ops;
+use std::ops::{Index, IndexMut};
 use crate::math::Normalise;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -27,6 +28,28 @@ impl Normalise for Vec2 {
 impl Display for Vec2 {
     fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
         write!(f, "({}, {})", self.x, self.y)
+    }
+}
+
+impl Index<usize> for Vec2 {
+    type Output = f32;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        match index {
+            0 => &self.x,
+            1 => &self.y,
+            _ => panic!("Index out of bounds")
+        }
+    }
+}
+
+impl IndexMut<usize> for Vec2 {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        match index {
+            0 => &mut self.x,
+            1 => &mut self.y,
+            _ => panic!("Index out of bounds")
+        }
     }
 }
 

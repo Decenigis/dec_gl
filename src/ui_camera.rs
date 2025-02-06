@@ -1,4 +1,4 @@
-use glm::{IVec2, Mat4};
+use crate::types::{IVec2, Mat4, Vec4};
 
 pub struct UICamera {
     projection_matrix: Mat4,
@@ -7,10 +7,10 @@ pub struct UICamera {
 impl UICamera {
     pub fn new (dimensions: IVec2, near_plane: f32, far_plane: f32) -> UICamera {
         const BLANK_MATRIX: Mat4 = Mat4 {
-            c0: glm::Vec4 { x: 0.0, y: 0.0, z: 0.0, w: 0.0 },
-            c1: glm::Vec4 { x: 0.0, y: 0.0, z: 0.0, w: 0.0 },
-            c2: glm::Vec4 { x: 0.0, y: 0.0, z: 0.0, w: 0.0 },
-            c3: glm::Vec4 { x: 0.0, y: 0.0, z: 0.0, w: 0.0 },
+            c0: Vec4 { x: 0.0, y: 0.0, z: 0.0, w: 0.0 },
+            c1: Vec4 { x: 0.0, y: 0.0, z: 0.0, w: 0.0 },
+            c2: Vec4 { x: 0.0, y: 0.0, z: 0.0, w: 0.0 },
+            c3: Vec4 { x: 0.0, y: 0.0, z: 0.0, w: 0.0 },
         };
 
         let mut camera = UICamera { projection_matrix: BLANK_MATRIX };
