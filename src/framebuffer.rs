@@ -1,7 +1,8 @@
 use gl::types::{GLuint, GLint, GLfloat};
+use crate::renderable::{GlRenderable, Renderable};
 use crate::types::{IVec2, ivec2, UVec2};
 
-use super::{Renderable, RenderError, Vertex2d};
+use super::{RenderError, Vertex2d};
 use super::shader::ShaderProgram;
 
 pub struct FrameBuffer {
@@ -9,7 +10,7 @@ pub struct FrameBuffer {
     texture_id: GLuint,
     depth_buffer_id: GLuint,
     size: IVec2,
-    renderable: Renderable
+    renderable: GlRenderable<Vertex2d>
 }
 
 impl Drop for FrameBuffer {
@@ -87,7 +88,8 @@ impl FrameBuffer {
                                 Vertex2d {x:  1.0,  y: -1.0, u: 1.0, v: 0.0},
                                 Vertex2d {x:  1.0,  y:  1.0, u: 1.0, v: 1.0},
         ];
-        let renderable = Renderable::new_initialised(&vertex_data, None)?;
+        let mut renderable = GlRenderable::<Vertex2d>::new();
+        renderable.initialise(&vertex_data, None)?;
 
         Ok(FrameBuffer {
             fbo_id,

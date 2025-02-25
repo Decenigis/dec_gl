@@ -3,7 +3,6 @@ use std::hash::{Hash, Hasher};
 use impl_ops::*;
 use std::ops;
 use std::ops::{Index, IndexMut};
-use crate::types::IVec3;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct IVec4 {

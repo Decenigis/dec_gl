@@ -1,5 +1,6 @@
 use gl::types::{GLenum, GLfloat, GLint, GLuint};
-use crate::{FrameBuffer, Renderable, RenderError, Vertex3d};
+use crate::{FrameBuffer, RenderError, Vertex2d};
+use crate::renderable::{GlRenderable, Renderable};
 use crate::types::{ivec2, IVec2, vec2, UVec2};
 use super::shader::{ShaderProgram, ShaderManager};
 
@@ -12,7 +13,7 @@ pub struct BloomFramebuffer {
     out_buffer: FrameBuffer,
     size: IVec2,
     samples: GLint,
-    renderable: Renderable,
+    renderable: GlRenderable<Vertex2d>,
     do_bloom: bool,
     bloom_levels: i32
 }
@@ -87,16 +88,17 @@ impl BloomFramebuffer {
             gl::BindFramebuffer(gl::DRAW_FRAMEBUFFER, 0);
 
             let vertex_data = vec![ //vertex data to be mapped to screen without the need for a matrix
-                                    Vertex3d {x: -1.0,  y: -1.0, z: 0.0, u: 0.0, v: 0.0},
-                                    Vertex3d {x:  1.0,  y: -1.0, z: 0.0, u: 1.0, v: 0.0},
-                                    Vertex3d {x: -1.0,  y:  1.0, z: 0.0, u: 0.0, v: 1.0},
+                                    Vertex2d {x: -1.0,  y: -1.0, u: 0.0, v: 0.0},
+                                    Vertex2d {x:  1.0,  y: -1.0, u: 1.0, v: 0.0},
+                                    Vertex2d {x: -1.0,  y:  1.0, u: 0.0, v: 1.0},
 
-                                    Vertex3d {x:  1.0,  y: -1.0, z: 0.0, u: 1.0, v: 0.0},
-                                    Vertex3d {x:  1.0,  y:  1.0, z: 0.0, u: 1.0, v: 1.0},
-                                    Vertex3d {x: -1.0,  y:  1.0, z: 0.0, u: 0.0, v: 1.0},
+                                    Vertex2d {x:  1.0,  y: -1.0, u: 1.0, v: 0.0},
+                                    Vertex2d {x:  1.0,  y:  1.0, u: 1.0, v: 1.0},
+                                    Vertex2d {x: -1.0,  y:  1.0, u: 0.0, v: 1.0},
             ];
 
-            let renderable = Renderable::new_initialised(&vertex_data, None)?;
+            let mut renderable = GlRenderable::<Vertex2d>::new();
+            renderable.initialise(&vertex_data, None)?;
 
             let ping_pong_buffers = [
                 FrameBuffer::new(width, height)?,

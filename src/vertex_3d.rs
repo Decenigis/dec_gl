@@ -4,6 +4,7 @@ use gl::types::GLfloat;
 use crate::Vertex;
 
 
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Vertex3d {
     pub x: GLfloat,
     pub y: GLfloat,

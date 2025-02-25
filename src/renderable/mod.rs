@@ -1,6 +1,8 @@
 #![allow(unused_imports)]
 mod renderable;
-mod mock_renderable;
+mod gl_renderable;
+mod nullable_renderable;
 
 pub use renderable::Renderable;
-pub use mock_renderable::MockRenderable;
+pub use gl_renderable::GlRenderable;
+//pub use nullable_renderable::NullableRenderable;
