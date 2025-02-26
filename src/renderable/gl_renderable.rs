@@ -14,7 +14,7 @@ pub enum GlRenderable<T: Vertex> {
 
 impl<T: Vertex> GlRenderable<T> {
 
-    pub(crate) fn new<F: Vertex> () -> GlRenderable<F> {
+    pub fn new<F: Vertex> () -> GlRenderable<F> {
         GlRenderable::Uninitialised { _phantom: PhantomData }
     }
 }
