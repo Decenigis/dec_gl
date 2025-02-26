@@ -21,7 +21,18 @@ impl<T: Vertex> GlRenderable<T> {
 
 impl<T: Vertex> Drop for GlRenderable<T> {
     fn drop(&mut self) {
-        self.uninitialise();
+        match self {
+            Self::Initialised { vao, vbo, .. } => unsafe {
+                gl::DeleteVertexArrays(1, [*vao].as_ptr());
+                gl::DeleteBuffers(1, [*vbo].as_ptr());
+            }
+            Self::InitialisedWithIndexing { vao, vbo, ibo, .. } => unsafe {
+                gl::DeleteVertexArrays(1, [*vao].as_ptr());
+                gl::DeleteBuffers(1, [*vbo].as_ptr());
+                gl::DeleteBuffers(1, [*ibo].as_ptr());
+            }
+            _ => {}
+        }
     }
 }
 
