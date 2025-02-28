@@ -2,6 +2,7 @@
 
 use std::cell::RefCell;
 use std::marker::PhantomData;
+use std::ops::Add;
 use std::rc::Rc;
 use crate::{vertex, RenderError, Vertex};
 use crate::renderable::Renderable;
@@ -11,7 +12,7 @@ pub struct NullableRenderable<T: Vertex> {
     initialised: Rc<RefCell<bool>>,
     vertices: Rc<RefCell<Vec<T>>>,
     indices: Rc<RefCell<Option<Vec<u32>>>>,
-    was_drawn: Rc<RefCell<bool>>,
+    draw_count: Rc<RefCell<u32>>,
 
     _phantom: PhantomData<T>
 }
@@ -22,13 +23,13 @@ impl<T: Vertex> NullableRenderable<T> {
         initialised: Rc<RefCell<bool>>,
         vertices: Rc<RefCell<Vec<T>>>,
         indices: Rc<RefCell<Option<Vec<u32>>>>,
-        was_drawn: Rc<RefCell<bool>>
+        draw_count: Rc<RefCell<u32>>
     ) -> Self {
         Self {
             initialised,
             vertices,
             indices,
-            was_drawn,
+            draw_count,
 
             _phantom: PhantomData
         }
@@ -79,7 +80,7 @@ impl<T: Vertex> Renderable<T> for NullableRenderable<T> {
     }
 
     fn draw (&self) {
-        self.was_drawn.replace(true);
+        *self.draw_count.borrow_mut() += 1;
     }
 
     fn uninitialise(&mut self) {
@@ -104,7 +105,7 @@ mod tests {
             initialised.clone(),
             Rc::new(RefCell::new(vec![])),
             Rc::new(RefCell::new(None)),
-            Rc::new(RefCell::new(false))
+            Rc::new(RefCell::new(0))
         );
 
         nullable_renderable.initialise(&vec![], None).unwrap();
@@ -120,7 +121,7 @@ mod tests {
             initialised.clone(),
             Rc::new(RefCell::new(vec![])),
             Rc::new(RefCell::new(None)),
-            Rc::new(RefCell::new(false))
+            Rc::new(RefCell::new(0))
         );
 
         nullable_renderable.uninitialise();
@@ -141,7 +142,7 @@ mod tests {
             Rc::new(RefCell::new(false)),
             vertices.clone(),
             Rc::new(RefCell::new(None)),
-            Rc::new(RefCell::new(false))
+            Rc::new(RefCell::new(0))
         );
 
         nullable_renderable.initialise(&expected_vertices, None).unwrap();
@@ -161,7 +162,7 @@ mod tests {
             Rc::new(RefCell::new(false)),
             vertices.clone(),
             Rc::new(RefCell::new(None)),
-            Rc::new(RefCell::new(false))
+            Rc::new(RefCell::new(0))
         );
 
         nullable_renderable.initialise(&vec![], None).unwrap();
@@ -182,26 +183,42 @@ mod tests {
             Rc::new(RefCell::new(false)),
             vertices.clone(),
             Rc::new(RefCell::new(None)),
-            Rc::new(RefCell::new(false))
+            Rc::new(RefCell::new(0))
         );
 
         assert!(matches!(nullable_renderable.update_data(&expected_vertices, None), Err {..}));
     }
 
-
     #[test]
     fn sets_indices_on_initialise() {
-        let expected_vertices = vec![1, 2, 3, 4, 5, 6];
+        let expected_indices = vec![1, 2, 3, 4, 5, 6];
         let indices = Rc::new(RefCell::new(None));
         let mut nullable_renderable = NullableRenderable::<Vertex2d>::new::<Vertex2d>(
             Rc::new(RefCell::new(false)),
             Rc::new(RefCell::new(vec![])),
             indices.clone(),
-            Rc::new(RefCell::new(false))
+            Rc::new(RefCell::new(0))
         );
 
-        nullable_renderable.initialise(&vec![], Some(&expected_vertices)).unwrap();
+        nullable_renderable.initialise(&vec![], Some(&expected_indices)).unwrap();
 
-        assert_eq!(expected_vertices, *indices.borrow().clone().unwrap());
+        assert_eq!(expected_indices, *indices.borrow().clone().unwrap());
+    }
+
+    #[test]
+    fn incrememnts_draw_on_draw() {
+        let draw_counter = Rc::new(RefCell::new(0));
+        let mut nullable_renderable = NullableRenderable::<Vertex2d>::new::<Vertex2d>(
+            Rc::new(RefCell::new(false)),
+            Rc::new(RefCell::new(vec![])),
+            Rc::new(RefCell::new(None)),
+            draw_counter.clone()
+        );
+
+        nullable_renderable.initialise(&vec![], None).unwrap();
+        nullable_renderable.draw();
+        nullable_renderable.draw();
+
+        assert_eq!(2, draw_counter.borrow().clone());
     }
 }
