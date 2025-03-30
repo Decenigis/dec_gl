@@ -1,10 +1,9 @@
 use gl::types::{GLuint, GLint, GLfloat};
+use crate::RenderError;
 use crate::shader::ShaderProgram;
 use crate::types::{IVec2, ivec2, UVec2};
 
-use super::{RenderError};
-
-pub struct FrameBufferMultisample {
+pub struct MultisampleFramebuffer {
    fbo_id: GLuint,
    texture_id: GLuint,
    depth_buffer_id: GLuint,
@@ -12,7 +11,7 @@ pub struct FrameBufferMultisample {
    samples: GLint,
 }
 
-impl Drop for FrameBufferMultisample {
+impl Drop for MultisampleFramebuffer {
     fn drop(&mut self) {
         unsafe {
             gl::DeleteFramebuffers(1, [self.fbo_id].as_ptr());
@@ -22,8 +21,8 @@ impl Drop for FrameBufferMultisample {
     }
 }
 
-impl FrameBufferMultisample {
-    pub fn new(width: GLint, height: GLint, samples: GLint) -> Result<FrameBufferMultisample, RenderError> {
+impl MultisampleFramebuffer {
+    pub fn new(width: GLint, height: GLint, samples: GLint) -> Result<MultisampleFramebuffer, RenderError> {
         let mut fbo_id: GLuint = 0;
         let mut texture_id: GLuint = 0;
         let mut depth_buffer_id: GLuint = 0;
@@ -76,7 +75,7 @@ impl FrameBufferMultisample {
             gl::BindFramebuffer(gl::DRAW_FRAMEBUFFER, 0);
         }
 
-        Ok(FrameBufferMultisample {
+        Ok(MultisampleFramebuffer {
             fbo_id,
             texture_id,
             depth_buffer_id,

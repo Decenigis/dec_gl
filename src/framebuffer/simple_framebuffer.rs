@@ -1,11 +1,10 @@
 use gl::types::{GLuint, GLint, GLfloat};
 use crate::renderable::{GlRenderable, Renderable};
 use crate::types::{IVec2, ivec2, UVec2};
+use crate::{RenderError, Vertex2d};
+use crate::shader::ShaderProgram;
 
-use super::{RenderError, Vertex2d};
-use super::shader::ShaderProgram;
-
-pub struct FrameBuffer {
+pub struct SimpleFramebuffer {
     fbo_id: GLuint,
     texture_id: GLuint,
     depth_buffer_id: GLuint,
@@ -13,7 +12,7 @@ pub struct FrameBuffer {
     renderable: GlRenderable<Vertex2d>
 }
 
-impl Drop for FrameBuffer {
+impl Drop for SimpleFramebuffer {
     fn drop(&mut self) {
         unsafe {
             gl::DeleteFramebuffers(1, [self.fbo_id].as_ptr());
@@ -23,8 +22,9 @@ impl Drop for FrameBuffer {
     }
 }
 
-impl FrameBuffer {
-    pub fn new(width: GLint, height: GLint) -> Result<FrameBuffer, RenderError> {
+
+impl SimpleFramebuffer {
+    pub fn new(width: GLint, height: GLint) -> Result<SimpleFramebuffer, RenderError> {
         let mut fbo_id: GLuint = 0;
         let mut texture_id: GLuint = 0;
         let mut depth_buffer_id: GLuint = 0;
@@ -91,7 +91,7 @@ impl FrameBuffer {
         let mut renderable = GlRenderable::<Vertex2d>::new();
         renderable.initialise(&vertex_data, None)?;
 
-        Ok(FrameBuffer {
+        Ok(SimpleFramebuffer {
             fbo_id,
             texture_id,
             depth_buffer_id,

@@ -1,16 +1,17 @@
 use gl::types::{GLenum, GLfloat, GLint, GLuint};
-use crate::{FrameBuffer, RenderError, Vertex2d};
+use crate::{RenderError, Vertex2d};
+use crate::framebuffer::simple_framebuffer::SimpleFramebuffer;
 use crate::renderable::{GlRenderable, Renderable};
+use crate::shader::{ShaderManager, ShaderProgram};
 use crate::types::{ivec2, IVec2, vec2, UVec2};
-use super::shader::{ShaderProgram, ShaderManager};
 
 pub struct BloomFramebuffer {
     fbo_id: GLuint,
     texture_id: GLuint,
     bloom_texture_id: GLuint,
     depth_buffer_id: GLuint,
-    ping_pong_buffers: [FrameBuffer; 2],
-    out_buffer: FrameBuffer,
+    ping_pong_buffers: [SimpleFramebuffer; 2],
+    out_buffer: SimpleFramebuffer,
     size: IVec2,
     samples: GLint,
     renderable: GlRenderable<Vertex2d>,
@@ -101,11 +102,11 @@ impl BloomFramebuffer {
             renderable.initialise(&vertex_data, None)?;
 
             let ping_pong_buffers = [
-                FrameBuffer::new(width, height)?,
-                FrameBuffer::new(width, height)?
+                SimpleFramebuffer::new(width, height)?,
+                SimpleFramebuffer::new(width, height)?
             ];
 
-            let out_buffer = FrameBuffer::new(width, height)?;
+            let out_buffer = SimpleFramebuffer::new(width, height)?;
 
             Ok(BloomFramebuffer {
                 fbo_id,
@@ -178,7 +179,7 @@ impl BloomFramebuffer {
             self.gaussian_blur_to_outbuffer(target_size, shader_manager)?;
         }
 
-        FrameBuffer::bind_default_framebuffer();
+        SimpleFramebuffer::bind_default_framebuffer();
         self.out_buffer.blit(target_size, mask, filter);
 
         Ok(())
