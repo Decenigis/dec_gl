@@ -1,6 +1,6 @@
 use gl::types::{GLuint, GLint, GLfloat};
 use crate::renderable::{GlRenderable, Renderable};
-use crate::types::{IVec2, ivec2, UVec2};
+use crate::types::{IVec2, ivec2, UVec2, Vec4, vec4};
 use crate::{RenderError, Vertex2d};
 use crate::shader::ShaderProgram;
 
@@ -9,7 +9,8 @@ pub struct SimpleFramebuffer {
     texture_id: GLuint,
     depth_buffer_id: GLuint,
     size: IVec2,
-    renderable: GlRenderable<Vertex2d>
+    renderable: GlRenderable<Vertex2d>,
+    clear_colour: Vec4,
 }
 
 impl Drop for SimpleFramebuffer {
@@ -96,7 +97,8 @@ impl SimpleFramebuffer {
             texture_id,
             depth_buffer_id,
             size: ivec2(width, height),
-            renderable
+            renderable,
+            clear_colour: vec4(0.0, 0.0, 0.0, 1.0),
         })
     }
 
@@ -154,18 +156,12 @@ impl SimpleFramebuffer {
     pub fn clear(&self) {
         self.bind_draw_target();
         unsafe {
-            const CLEAR_COLOUR: [f32; 4] = [0.0f32, 0.0f32, 0.0f32, 0.0f32];
-            gl::ClearBufferfv(gl::COLOR, 0, &CLEAR_COLOUR as *const GLfloat);
+            gl::ClearBufferfv(gl::COLOR, 0, &self.clear_colour.as_array() as *const GLfloat);
             gl::ClearBufferfv(gl::DEPTH, 0, &[1.0f32] as _);
         }
     }
 
-    pub fn _clear_with_zeros(&self) {
-        self.bind_draw_target();
-        unsafe {
-            let temp = [1.0f32, 1.0f32, 1.0f32, 0.0f32];
-            gl::ClearBufferfv(gl::COLOR, 0, &temp as *const GLfloat);
-            gl::ClearBufferfv(gl::DEPTH, 0, &[1.0f32] as _);
-        }
+    pub fn set_clear_colour(&mut self, colour: Vec4) {
+        self.clear_colour = colour;
     }
 }
