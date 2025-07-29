@@ -12,7 +12,7 @@ type Result<T> = std::result::Result<T, RenderError>;
 pub struct GLHandler {
     glfw_instance: glfw::Glfw,
     glfw_window: GLWindow,
-    
+
     vsync: bool,
 }
 
@@ -54,7 +54,7 @@ impl GLHandler {
         Ok (Rc::new(RefCell::new(GLHandler {
             glfw_instance: glfw,
             glfw_window: window,
-            
+
             vsync,
         })))
     }
@@ -73,15 +73,14 @@ impl GLHandler {
         self.glfw_window.reset_deltas();
         self.glfw_window.handle_events(&mut self.glfw_instance)
     }
-    
+
     pub fn set_vsync(&mut self, vsync: bool) {
         self.glfw_instance.set_swap_interval(glfw::SwapInterval::Sync(if vsync {1} else {0}));
     }
-    
+
     pub fn get_vsync(&self) -> bool {
         self.vsync
     }
-
 
     /* GETTERS AND SETTERS */
 
