@@ -75,6 +75,7 @@ impl GLHandler {
     }
 
     pub fn set_vsync(&mut self, vsync: bool) {
+        self.vsync = vsync;
         self.glfw_instance.set_swap_interval(glfw::SwapInterval::Sync(if vsync {1} else {0}));
     }
 
