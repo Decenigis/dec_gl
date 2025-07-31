@@ -198,7 +198,10 @@ impl GLWindow {
 
         self.clear_colour = [red, green, blue];
     }
-
+    
+    pub fn set_title(&mut self, title: &str) {
+        self.glfw_window.set_title(title);
+    }
 
 
     pub fn has_resized_this_frame (&self) -> bool {
