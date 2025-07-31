@@ -88,4 +88,7 @@ impl GLHandler {
     pub fn get_window (&self) -> &GLWindow {
         &self.glfw_window
     }
+    pub fn get_window_mut (&mut self) -> &mut GLWindow {
+        &mut self.glfw_window
+    }
 }
