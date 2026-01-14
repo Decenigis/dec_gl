@@ -63,10 +63,10 @@ impl_op_ex!(* |a: &Mat4, b: &Mat4| -> Mat4 {
 
     for i in 0..4 {
         for j in 0..4 {
-            out[i * 4 + j] = a_array[0].as_array()[i] * b_array[j].as_array()[0]
-                          + a_array[1].as_array()[i] * b_array[j].as_array()[1]
-                          + a_array[2].as_array()[i] * b_array[j].as_array()[2]
-                          + a_array[3].as_array()[i] * b_array[j].as_array()[3];
+            out[i * 4 + j] = a_array[0].as_array()[j] * b_array[i].as_array()[0]
+                          + a_array[1].as_array()[j] * b_array[i].as_array()[1]
+                          + a_array[2].as_array()[j] * b_array[i].as_array()[2]
+                          + a_array[3].as_array()[j] * b_array[i].as_array()[3];
         }
     }
 
@@ -104,7 +104,7 @@ impl Mat4 {
             c3
         }
     }
-    
+
     pub fn identity() -> Mat4 {
         Mat4::new(
             vec4(1.0, 0.0, 0.0, 0.0),
