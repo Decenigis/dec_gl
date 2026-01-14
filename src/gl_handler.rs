@@ -37,7 +37,7 @@ impl GLHandler {
             Err(e) => return Err(e), //pass the error straight back to the app as this is unrecoverable
         }; //init window,
 
-        gl::load_with(|f_name| window.get_glfw_window_mut().get_proc_address(f_name).unwrap() as *const std::os::raw::c_void); //load GL instructions with GLFW
+        gl::load_with(|f_name| unsafe { std::mem::transmute(window.get_glfw_window_mut().get_proc_address(f_name)) }); //load GL instructions with GLFW
 
         glfw.set_swap_interval(glfw::SwapInterval::Sync(if vsync {1} else {0}));
 
