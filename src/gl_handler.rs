@@ -37,7 +37,7 @@ impl GLHandler {
             Err(e) => return Err(e), //pass the error straight back to the app as this is unrecoverable
         }; //init window,
 
-        gl::load_with(|f_name| window.get_glfw_window_mut().get_proc_address(f_name)); //load GL instructions with GLFW
+        gl::load_with(|f_name| window.get_glfw_window_mut().get_proc_address(f_name).unwrap() as *const std::os::raw::c_void); //load GL instructions with GLFW
 
         glfw.set_swap_interval(glfw::SwapInterval::Sync(if vsync {1} else {0}));
 
@@ -90,5 +90,15 @@ impl GLHandler {
     }
     pub fn get_window_mut (&mut self) -> &mut GLWindow {
         &mut self.glfw_window
+    }
+
+    pub fn set_cursor_enabled(&mut self, enabled: bool) {
+        unsafe {
+            glfwSetInputMode(
+                self.glfw_window.get_glfw_window_mut().window_ptr(),
+                glfw::ffi::GLFW_CURSOR,
+                if enabled { glfw::ffi::GLFW_CURSOR_NORMAL }  else { glfw::ffi::GLFW_CURSOR_DISABLED }
+            );
+        }
     }
 }

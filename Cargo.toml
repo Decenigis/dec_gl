@@ -1,12 +1,12 @@
 [package]
 name = "dec_gl"
-version = "0.3.7"
+version = "0.4.0"
 edition = "2021"
 
 [dependencies]
 gl = "0.14.0"
 glm = "0.2.3"
-glfw = {version = "0.59.0"}
+glfw = {version = "0.61.0"}
 image = "0.25.5"
 toml = "0.8.19"
 thiserror = "2.0.11"
